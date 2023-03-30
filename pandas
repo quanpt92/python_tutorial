@@ -149,3 +149,127 @@ print(df.loc['r1':'r5'])
 # Select Alternate Rows with in Index Labels
 print(df.loc['r1':'r5':2])
 
+import pandas as pd
+technologies = {
+    'Courses':["Spark","PySpark"],
+    'Fee' :[20000,25000],
+    'Duration':['30days','40days'],
+    'Discount':[1000,2300],
+    'Tutor':['Michel','Sam']
+              }
+df = pd.DataFrame(technologies)
+print(df)
+
+# Select multiple columns
+print(df[["Courses","Fee","Duration"]])
+
+# Select Random columns
+print(df.loc[:, ["Courses","Fee","Discount"]])
+
+# Select columns by range
+print(df.loc[:,'Fee':'Discount']) 
+print(df.loc[:,'Duration':])
+print(df.loc[:,:'Duration'])
+
+# Select every alternate column
+print(df.loc[:,::2])
+
+# Selected by column position
+print(df.iloc[:,[1,3,4]])
+
+# Select between indexes 1 and 4 (2,3,4)
+print(df.iloc[:,1:4])
+
+# Select From 3rd to end
+print(df.iloc[:,2:])
+
+# Select First Two Columns
+print(df.iloc[:,:2])
+
+#####################################DataFrame Query######################################
+
+
+# query() method syntax
+DataFrame.query(expr, inplace=False, **kwargs)
+
+
+# Query all rows with Courses equals 'Spark'
+df2=df.query("Courses == 'Spark'")
+print(df2)
+
+# Query Rows by using Python variable
+value='Spark'
+df2=df.query("Courses == @value")
+print(df2)
+
+# Replace current esisting DataFrame
+df.query("Courses == 'Spark'",inplace=True)
+print(df)
+
+# not equals condition
+df2=df.query("Courses != 'Spark'")
+
+# Query Rows by list of values
+print(df.query("Courses in ('Spark','PySpark')"))
+
+# Query Rows by list of values
+values=['Spark','PySpark']
+print(df.query("Courses in @values"))
+
+# Query Rows not in list of values
+values=['Spark','PySpark']
+print(df.query("Courses not in @values"))
+
+# Query Rows not in list of values
+values=['Spark','PySpark']
+print(df.query("Courses not in @values"))
+
+# Query by multiple conditions
+print(df.query("`Courses Fee` >= 23000 and `Courses Fee` <= 24000"))
+
+# By using lambda function
+print(df.apply(lambda row: row[df['Courses'].isin(['Spark','PySpark'])]))
+
+# Other examples you can try to query rows
+df[df["Courses"] == 'Spark'] 
+df.loc[df['Courses'] == value]
+df.loc[df['Courses'] != 'Spark']
+df.loc[df['Courses'].isin(values)]
+df.loc[~df['Courses'].isin(values)]
+df.loc[(df['Discount'] >= 1000) & (df['Discount'] <= 2000)]
+df.loc[(df['Discount'] >= 1200) & (df['Fee'] >= 23000 )]
+
+# Select based on value contains
+print(df[df['Courses'].str.contains("Spark")])
+
+# Select after converting values
+print(df[df['Courses'].str.lower().str.contains("spark")])
+
+#Select startswith
+print(df[df['Courses'].str.startswith("P")])
+
+####################Get value from Cell#######################
+
+# Using loc[]. Get cell value by name & index
+print(df.loc['r4']['Duration'])
+print(df.loc['r4','Duration'])
+print(df.loc['r4'][2])
+# Using iloc[]. Get cell value by index & name
+print(df.iloc[3]['Duration'])
+print(df.iloc[3][2])
+print(df.iloc[3,2])
+
+# Using DataFrame.at[]
+print(df.at['r4','Duration'])
+print(df.at[df.index[3],'Duration'])
+
+# Using DataFrame.iat[]
+print(df.iat[3,2])
+
+#Get a cell value
+print(df["Duration"].values[3])
+
+# Get cell value from last row
+print(df.iloc[-1,2])                  # prints 60days
+print(df.iloc[-1]['Duration'])        # prints 60days
+print(df.at[df.index[-1],'Duration']) # prints 60days
