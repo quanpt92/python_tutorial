@@ -273,3 +273,194 @@ print(df["Duration"].values[3])
 print(df.iloc[-1,2])                  # prints 60days
 print(df.iloc[-1]['Duration'])        # prints 60days
 print(df.at[df.index[-1],'Duration']) # prints 60days
+
+
+import pandas as pd
+technologies   = ({
+    'Courses':["Spark","PySpark","Hadoop","Python","Pandas","Hadoop","Spark","Python","NA"],
+    'Fee' :[22000,25000,23000,24000,26000,25000,25000,22000,1500],
+    'Duration':['30days','50days','55days','40days','60days','35days','30days','50days','40days'],
+    'Discount':[1000,2300,1000,1200,2500,None,1400,1600,0]
+          })
+df = pd.DataFrame(technologies)
+print(df))
+
+# Use groupby() to compute the sum
+df2 =df.groupby(['Courses']).sum()
+print(df2)
+
+# Group by on multiple columns
+df2 =df.groupby(['Courses', 'Duration']).sum()
+print(df2)
+
+# Set Index on group by results
+df2 = df.groupby(['Courses','Duration']).sum().reset_index()
+print(df2)
+
+# Using groupby on single column in pandas 
+df2 = df.groupby(['Courses'])['Fee'].sum().reset_index()
+print(df2)
+
+# Ignore sorting on group by key
+df2=df.groupby(by=['Courses'], sort=False).sum()
+print(df2)
+
+# Sort group key on descending order
+groupedDF = df.groupby('Courses',sort=False).sum()
+sortedDF=groupedDF.sort_values('Courses', ascending=False)
+print(sortedDF)
+
+# Groupby & multiple aggregations
+result = df.groupby('Courses')['Fee'].aggregate(['min','max'])
+print(result)
+
+# Groupby multiple columns & multiple aggregations
+result = df.groupby('Courses').aggregate({'Duration':'count','Fee':['min','max']})
+print(result)
+
+#########################Get columns Names from Lists######################3
+
+import pandas as pd
+import numpy as np
+
+technologies= {
+    'Courses':["Spark","PySpark","Hadoop","Python","Pandas"],
+    'Fee' :[22000,25000,23000,24000,26000],
+    'Duration':['30days','50days','30days', None,np.nan],
+    'Discount':[1000,2300,1000,1200,2500]
+          }
+df = pd.DataFrame(technologies)
+print(df)
+
+# Get the list of all column names from headers
+column_headers = list(df.columns.values)
+print("The Column Header :", column_headers)
+
+# Get the list of all column names from headers
+column_headers = df.columns.values.tolist()
+print("The Column Header :", column_headers)
+
+#Using list(df) to get the column headers as a list
+column_headers = list(df.columns)
+
+#Using list(df) to get the list of all Column Names
+column_headers = list(df)
+
+# Dataframe show all columns sorted list
+col_headers=sorted(df)
+print(col_headers)
+
+# Get all Column Header Labels as List
+for column_headers in df.columns: 
+    print(column_headers)
+    
+column_headers = df.keys().values.tolist()
+print("The Column Header :", column_headers)
+
+# Get all numeric columns
+numeric_columns = df._get_numeric_data().columns.values.tolist()
+print(numeric_columns)
+
+# Simple Pandas Numeric Columns Code
+numeric_columns=df.dtypes[df.dtypes == "int64"].index.values.tolist()
+print(numeric_columns)
+
+#####shuffle dataframe rows###################################
+import pandas as pd
+technologies = {
+    'Courses':["Spark","PySpark","Hadoop","Python","pandas","Oracle","Java"],
+    'Fee' :[20000,25000,26000,22000,24000,21000,22000],
+    'Duration':['30day','40days','35days', '40days','60days','50days','55days'],
+    'Discount':[1000,2300,1500,1200,2500,2100,2000]
+               }
+df = pd.DataFrame(technologies)
+print(df)
+
+# shuffle the DataFrame rows & return all rows
+df1 = df.sample(frac = 1)
+print(df1)
+
+# Create a new Index starting from zero
+df1 = df.sample(frac = 1).reset_index()
+print(df1)
+
+# using NumPy
+import numpy as np
+np.random.shuffle(DataFrame.values)
+
+# Using numpy permutation() method to shuffle DataFrame rows
+df1 = df.iloc[np.random.permutation(df.index)].reset_index(drop=True)
+print(df1)
+
+# Using sklearn to shuffle rows
+from sklearn.utils import shuffle
+df = shuffle(df)
+
+# Using apply() method to shuffle the DataFrame rows
+import numpy as np
+df1 = df.apply(np.random.permutation, axis=1)    
+print(df1)
+
+# Using lambda method to Shuffle/permutating DataFrame rows
+df2 = df.apply(lambda x: x.sample(frac=1).values)
+print(df2)
+
+# Using sample() method to shuffle DataFrame rows and columns
+df2 = df.sample(frac=1, axis=1).sample(frac=1).reset_index(drop=True)
+print(df2)
+
+
+########################JOIN DataFrame#############################
+# Syntax of pandas.DataFrame.join() method
+DataFrame.join(other, on=None, how='left', lsuffix='', rsuffix='', sort=False)
+
+import pandas as pd
+technologies = {
+    'Courses':["Spark","PySpark","Python","pandas"],
+    'Fee' :[20000,25000,22000,30000],
+    'Duration':['30days','40days','35days','50days'],
+              }
+index_labels=['r1','r2','r3','r4']
+df1 = pd.DataFrame(technologies,index=index_labels)
+
+technologies2 = {
+    'Courses':["Spark","Java","Python","Go"],
+    'Discount':[2000,2300,1200,2000]
+              }
+index_labels2=['r1','r6','r3','r5']
+df2 = pd.DataFrame(technologies2,index=index_labels2)
+
+print(df1)
+print(df2)
+
+df3=df1.join(df2, lsuffix="_left", rsuffix="_right")
+print(df3)
+
+# pandas Inner join DataFrames
+df3=df1.join(df2, lsuffix="_left", rsuffix="_right", how='inner')
+print(df3)
+
+# pandas Right join DataFrames
+df3=df1.join(df2, lsuffix="_left", rsuffix="_right", how='right')
+print(df3)
+
+# pandas outer join DataFrames
+df3=df1.join(df2, lsuffix="_left", rsuffix="_right", how='outer')
+print(df3)
+
+
+# pandas join on column
+df3=df1.set_index('Courses').join(df2.set_index('Courses'), how='inner')
+print(df3)
+
+# pandas join
+df3=df1.join(df2.set_index('Courses'), how='inner', on='Courses')
+print(df3)
+
+##################Merge DataFrame############################3
+
+# pandas.merge() Syntax
+pandas.merge(left, right, how='inner', on=None, left_on=None, right_on=None, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=True, indicator=False, validate=None)
+
+# pandas.DataFrame.merge() Syntax
+DataFrame.merge(right, how='inner', on=None, left_on=None, right_on=None, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=True, indicator=False, validate=None)
